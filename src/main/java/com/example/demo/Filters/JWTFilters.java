@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class JWTFilters extends OncePerRequestFilter{
 	private JWTUtility jwtUtility;
 	
 	@Autowired
-	private CustomUserDetails customUserDetails;
+	private UserDetailsService detailsService;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -42,7 +43,7 @@ public class JWTFilters extends OncePerRequestFilter{
 		}
 		
 		if(email !=null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails=customUserDetails.loadUserByUsername(email);
+			UserDetails userDetails=detailsService.loadUserByUsername(email);
 			if(jwtUtility.validate(email, userDetails, token)) {
 				UsernamePasswordAuthenticationToken authToken=
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
