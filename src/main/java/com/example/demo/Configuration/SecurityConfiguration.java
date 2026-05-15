@@ -26,7 +26,7 @@ public class SecurityConfiguration {
 		.sessionManagement(session ->
         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 )
-				.authorizeHttpRequests(req -> req.requestMatchers("/api/auth/**")
+				.authorizeHttpRequests(req -> req.requestMatchers("/api/auth/login","/api/auth/register")
 						.permitAll().anyRequest().authenticated());
 		http.addFilterBefore(jwtFilters, UsernamePasswordAuthenticationFilter.class);
 		return http.build();

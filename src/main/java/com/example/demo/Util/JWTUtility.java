@@ -47,7 +47,7 @@ public class JWTUtility {
 	}
 	
 	public boolean validate(String email, UserDetails userDetails, String token) {
-		return email.equals(userDetails.getUsername()) && isExpired(token);
+		return email.equals(userDetails.getUsername()) && !isExpired(token);
 	}
 
 }
